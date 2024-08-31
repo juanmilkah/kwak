@@ -93,7 +93,7 @@ export default function Services() {
   const HandleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
     const name = e.target.name;
-    const price = parseFloat(e.target.value) * employeeCount;
+    const price = parseFloat(e.target.value);
     const newItem = { name, price };
     if (isChecked) {
       setChecked((prev) => [...prev, newItem]);
@@ -141,7 +141,9 @@ export default function Services() {
               id="employeeCount"
               name="employeeCount"
               defaultValue={1}
-              onChange={(e) => setEmployeeCount(parseInt(e.target.value))}
+              onChange={(e) => {
+                setEmployeeCount(parseInt(e.target.value));
+              }}
               min="1"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
@@ -191,7 +193,9 @@ export default function Services() {
                   <tr key={i} className="border-b">
                     <td className="px-4 py-2">{i + 1}</td>
                     <td className="px-4 py-2">{sol.name}</td>
-                    <td className="px-4 py-2">${sol.price.toFixed(2)}</td>
+                    <td className="px-4 py-2">
+                      ${(sol.price * employeeCount).toFixed(2)}
+                    </td>
                   </tr>
                 ))}
                 <tr>
@@ -199,7 +203,7 @@ export default function Services() {
                     Total Price
                   </td>
                   <td className="px-4 py-2 font-bold">
-                    ${totalPrice.toFixed(2)}
+                    ${(totalPrice * employeeCount).toFixed(2)}
                   </td>
                 </tr>
               </tbody>

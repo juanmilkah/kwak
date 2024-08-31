@@ -1,18 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 
 export default function CheckoutPage() {
   const location = useLocation();
-  const { employeeCount, checked } = location.state || {};
+  const { checked, employeeCount } = location.state || {};
+  const [message, setMessage] = useState<string>("");
 
-  const totalPrice = checked?.reduce((acc, item) => acc + item.price, 0) || 0;
-  const HandleFormSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {};
+  const totalPrice =
+    checked?.reduce((acc, item) => acc + item.price * employeeCount, 0) || 0;
+  const HandleFormSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setMessage("Successfull!");
+  };
   return (
     <>
-      {/* <h1>Check out Page</h1>
-      <h3>Total Price: {totalPrice}</h3>
-      <h4>Employee Count: {employeeCount}</h4> */}
-      <div>
+      <div className="h-screen">
         {checked && checked.length > 0 ? (
           <div className="mt-8">
             <h3 className="text-xl font-semibold mb-4">Selected Services</h3>
@@ -22,6 +24,7 @@ export default function CheckoutPage() {
                   <th className="px-4 py-2 text-left">No</th>
                   <th className="px-4 py-2 text-left">Service</th>
                   <th className="px-4 py-2 text-left">Price</th>
+                  <th className="px-4 py-2 text-left">Quantity</th>
                 </tr>
               </thead>
               <tbody>
@@ -30,13 +33,14 @@ export default function CheckoutPage() {
                     <td className="px-4 py-2">{i + 1}</td>
                     <td className="px-4 py-2">{sol.name}</td>
                     <td className="px-4 py-2">${sol.price.toFixed(2)}</td>
+                    <td className="px-4 py-2">{employeeCount}</td>
                   </tr>
                 ))}
                 <tr>
                   <td colSpan={2} className="px-4 py-2 font-bold">
                     Total Price
                   </td>
-                  <td className="px-4 py-2 font-bold">
+                  <td colSpan={2} className="px-4 py-2 font-bold">
                     ${totalPrice.toFixed(2)}
                   </td>
                 </tr>
@@ -53,6 +57,7 @@ export default function CheckoutPage() {
         ) : (
           <p>No items selected.</p>
         )}
+        {message.length > 0 && <span>{message}</span>}
       </div>
     </>
   );
